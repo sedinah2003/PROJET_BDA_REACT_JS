@@ -1,4 +1,4 @@
-name: CI - Build Docker Image
+name: CI - Build et Push Docker Image
 
 on:
   push:
@@ -16,8 +16,15 @@ jobs:
       - name: 🐳 Installer Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔨 Builder l'image Docker
-        run: docker build -t projet-bda-react-js .
+      - name: 🔐 Se connecter à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: ✅ Vérifier que l'image existe
-        run: docker images projet-bda-react-js
+      - name: 🔨 Builder et Pusher l'image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: sedinah/projet-bda-react-js:latest
