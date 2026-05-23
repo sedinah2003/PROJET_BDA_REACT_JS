@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: projet-bda
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: projet-bda
+  template:
+    metadata:
+      labels:
+        app: projet-bda
+    spec:
+      containers:
+      - name: projet-bda
+        image: projet-bda:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
