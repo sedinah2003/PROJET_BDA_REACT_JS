@@ -1,0 +1,30 @@
+name: Build and Deploy EmpAudit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v3
+
+      - name: Connexion Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build et Push image Docker
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/projet-bda:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/projet-bda:latest
+
+      - name: Déployer sur Kubernetes
+        run: |
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
