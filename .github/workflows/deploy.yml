@@ -26,8 +26,3 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/projet-bda:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/projet-bda:latest
-
-      - name: Déployer sur Kubernetes
-        run: |
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
